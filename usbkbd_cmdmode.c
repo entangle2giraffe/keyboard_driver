@@ -81,13 +81,18 @@ static void process_key(struct usbkbd_cmd *kbd, unsigned char keycode, bool pres
     {
     case KEY_B:
         send_ctrl_alt_t(kbd);
+        // Release 'b' key after handling
+        send_key(kbd, KEY_B, false);
         break;
     case KEY_Q:
         kbd->command_mode = false;
         printk(KERN_INFO "usbkbd_cmdmode: Exiting Command Mode\n");
+        // Release 'q' key after handling
+        send_key(kbd, KEY_Q, false);
         break;
     default:
-        // Ignore other keys in command mode
+        // Ignore other keys in command mode, but release them if pressed
+        send_key(kbd, keycode, false);
         break;
     }
 }
